@@ -2,6 +2,32 @@
 require_once './functions.php';
 
 $airports = require './airports.php';
+//var_dump($_GET);
+$newAirports = $airports;
+
+if (isset($_GET["filter_by_first_letter"])) {
+    array_splice($newAirports, 0);
+
+    foreach ($airports as $value) {
+
+        if (substr($value['name'], 0, 1) === $_GET["filter_by_first_letter"]) {
+            $newAirports[] = $value;
+        }
+    }
+    if (count($newAirports) <= 5 ) {$_GET['page'] =1;}
+}
+
+if ($_GET["filter_by_state"]) {
+    $_GET["filter_by_first_letter"] = '';
+    foreach ($airports as $value) {
+
+        if ($value['state'] === $_GET["filter_by_state"]) {
+            $newAirportsByState[] = $value;
+        }
+    }
+    if (count($newAirports) <= 5 ) {$_GET['page'] =1;}
+}
+
 
 // Filtering
 /**
@@ -53,10 +79,10 @@ $airports = require './airports.php';
         Filter by first letter:
 
         <?php foreach (getUniqueFirstLetters(require './airports.php') as $letter): ?>
-            <a href="#"><?= $letter ?></a>
+            <a href="?page=<?= $_GET['page'] ?>&filter_by_first_letter=<?=trim($letter)?>&filter_by_state=<?= $_GET['filter_by_state'] ?>"><?= $letter ?></a>
         <?php endforeach; ?>
 
-        <a href="/" class="float-right">Reset all filters</a>
+        <a href="/src/web/?page=1&filter_by_first_letter=&filter_by_state=" class="float-right">Reset all filters</a>
     </div>
 
     <!--
@@ -91,16 +117,59 @@ $airports = require './airports.php';
              - when you apply filter_by_state, than filter_by_first_letter (see Filtering task #1) is not reset
                i.e. if you have filter_by_first_letter set you can additionally use filter_by_state
         -->
-        <?php foreach ($airports as $airport): ?>
-        <tr>
-            <td><?= $airport['name'] ?></td>
-            <td><?= $airport['code'] ?></td>
-            <td><a href="#"><?= $airport['state'] ?></a></td>
-            <td><?= $airport['city'] ?></td>
-            <td><?= $airport['address'] ?></td>
-            <td><?= $airport['timezone'] ?></td>
-        </tr>
-        <?php endforeach; ?>
+        <?php
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+        $limit = 5;
+        $offset = $limit * ($page -1);
+
+        if ($_GET["filter_by_state"]) {
+            $page = isset($_GET['page']) ? $_GET['page'] : 1;
+
+            $total_pages = round(count($newAirportsByState) / $limit, 0, PHP_ROUND_HALF_DOWN);
+
+            $outputByState = array_slice($newAirportsByState, $offset, $limit);
+            foreach ($outputByState as $airport): ?>
+                <tr>
+                    <td><?= $airport['name'] ?></td>
+                    <td><?= $airport['code'] ?></td>
+                    <td><a href="?page=<?= $_GET['page'] ?>&filter_by_first_letter=<?= $_GET['filter_by_first_letter'] ?>&filter_by_state=<?= $airport['state'] ?>"><?= $airport['state'] ?></a></td>
+                    <td><?= $airport['city'] ?></td>
+                    <td><?= $airport['address'] ?></td>
+                    <td><?= $airport['timezone'] ?></td>
+                </tr>
+            <?php endforeach; } else
+
+        if ($_GET["filter_by_first_letter"]) {
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+
+            $total_pages = round(count($newAirports) / $limit, 0, PHP_ROUND_HALF_DOWN);
+
+            $output = array_slice($newAirports, $offset, $limit);
+            foreach ($output as $airport): ?>
+                <tr>
+                    <td><?= $airport['name'] ?></td>
+                    <td><?= $airport['code'] ?></td>
+                    <td><a href="?page=<?= $_GET['page'] ?>&filter_by_first_letter=<?= $_GET['filter_by_first_letter'] ?>&filter_by_state=<?= $airport['state'] ?>"><?= $airport['state'] ?></a></td>
+                    <td><?= $airport['city'] ?></td>
+                    <td><?= $airport['address'] ?></td>
+                    <td><?= $airport['timezone'] ?></td>
+                </tr>
+            <?php endforeach; } else {
+            $limit = 20;
+            $total_pages = round(count($airports) / $limit, 0, PHP_ROUND_HALF_DOWN);
+
+            $output = array_slice($airports, $offset, $limit);
+
+        foreach ($output as $airport): ?>
+            <tr>
+                <td><?= $airport['name'] ?></td>
+                <td><?= $airport['code'] ?></td>
+                <td><a href="?page=<?= $_GET['page'] ?>&filter_by_first_letter=<?= $_GET['filter_by_first_letter'] ?>&filter_by_state=<?= $airport['state'] ?>"><?= $airport['state'] ?></a></td>
+                <td><?= $airport['city'] ?></td>
+                <td><?= $airport['address'] ?></td>
+                <td><?= $airport['timezone'] ?></td>
+            </tr>
+        <?php endforeach; } ?>
         </tbody>
     </table>
 
@@ -112,12 +181,19 @@ $airports = require './airports.php';
          - show 5 airports per page
          - use page key (i.e. /?page=1)
          - when you apply pagination - all filters and sorting are not reset
+
+         /?page=1&filter_by_first_letter=Q
     -->
+
     <nav aria-label="Navigation">
         <ul class="pagination justify-content-center">
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <?php if ($total_pages > 2) {
+            for ($i=1; $i<$total_pages; $i++) {
+
+                ?>
+            <li class="page-item <?php if ($_GET['page'] == $i) { echo "active"; }; ?>"><a class="page-link" href="?page=<?php echo $i ?>&filter_by_first_letter=<?= $_GET['filter_by_first_letter'] ?>&filter_by_state=<?= $_GET['filter_by_state'] ?>"><?php echo $i ?></a></li>
+            <?php } }?>
+
         </ul>
     </nav>
 
