@@ -4,9 +4,6 @@ namespace arrays;
 
 class Arrays implements ArraysInterface {
 
-    const NAME = 'name';
-    const TAGS = 'tags';
-
     public function repeatArrayValues(array $input): array
     {
         $result = [];
@@ -22,44 +19,22 @@ class Arrays implements ArraysInterface {
 
     public function getUniqueValue(array $input): int
     {
-        $result = array();
-        if($input) {
-            $arrayC = array_count_values($input);
-
-            while ($number = current($arrayC)) {
-                if ($number == 1) {
-                    $result[] = key($arrayC);
-                }
-                next($arrayC);
-            }
-            if ($result) {
-                return min($result);
-            } else return 0;
-        } else return 0;
+        foreach (array_count_values($input) as $key => $value) {
+            if ($value == 1) $result[] = $key;
+        }
+        return (empty($input) or empty($result)) ? 0 : min($result);
     }
 
     public function groupByTag(array $input): array
     {
-        $arrayTag = [];
-
-        foreach(array_column($input, self::TAGS) as $tags) {
-            $arrayTag = array_merge($arrayTag, $tags);
-        }
-
-        $arrayTag = array_unique($arrayTag);
-        sort($arrayTag);
-
-        $groupedList = [];
-
-        foreach($arrayTag as $name)
-        {
-            foreach($input as $key){
-                if (in_array($name, $key[self::TAGS])){
-                    $groupedList[$name][] = $key[self::NAME];
-                    sort($groupedList[$name]);
-                }
+        $result = [];
+        foreach($input as $value) {
+            foreach ($value['tags'] as $tag) {
+                $result[$tag][] = $value['name'];
+                sort($result[$tag]);
             }
         }
-        return $groupedList;
+        ksort($result);
+        return $result;
     }
 }
