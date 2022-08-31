@@ -28,7 +28,6 @@ class CountArgumentsWrapperTest extends TestCase
             [['string', null]],
             [['string',1]],
             [[1,'string']],
-            [['string','string2']],
         ];
     }
 }

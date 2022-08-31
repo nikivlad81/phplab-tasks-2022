@@ -60,11 +60,9 @@ class Functions
      */
     public function sayHelloArgumentWrapper($arg): string
     {
-        if (is_int($arg) or is_string($arg) or is_bool($arg)) {
-            return $this->sayHelloArgument($arg);
-        }
-         else throw new InvalidArgumentException('Entered value is not: number, string or bool');
-
+        return (is_int($arg) or is_string($arg) or is_bool($arg)) ?
+            $this->sayHelloArgument($arg) :
+            throw new InvalidArgumentException('Entered value is not: number, string or bool');
     }
 
     /**
@@ -96,9 +94,12 @@ class Functions
      */
     public function countArgumentsWrapper($arg): array
     {
-        if (is_string($arg)) {
-            return $this->countArguments($arg);
+        foreach ($arg as $value) {
+            if(gettype($value) !== 'string') {
+                throw new InvalidArgumentException('Entered value is not string');
+            }
         }
-        else throw new InvalidArgumentException('Entered value is not string');
+        return $this->countArguments(...$arg);
     }
+
 }
