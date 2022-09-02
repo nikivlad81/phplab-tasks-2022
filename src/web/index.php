@@ -115,7 +115,7 @@ $airports = pagination($airports);
     <nav aria-label="Navigation">
         <ul class="pagination justify-content-center">
             <?php for ($i=1; $i<paginationNumbers($for_pagination); $i++) { ?>
-                    <li class="page-item <?php if ($_GET['page'] == $i) echo "active";?>"><a class="page-link" href="?page=<?php echo $i . linkForPagination()?>"><?php echo $i ?></a></li>
+                    <li class="page-item <?php if (isset($_GET['page']) and $_GET['page'] == $i) echo "active";?>"><a class="page-link" href="?page=<?php echo $i . linkForPagination()?>"><?php echo $i ?></a></li>
                 <?php } ?>
          </ul>
     </nav>

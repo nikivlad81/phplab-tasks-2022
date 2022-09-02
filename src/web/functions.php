@@ -15,7 +15,7 @@ const LIMIT_ALL = 20; // Number of values per page without sorting.
 
 function getUniqueFirstLetters(array $airports): array
 {
-
+    $unique = [];
     $letter = [];
     foreach ($airports as $value) {
         $unique[] = substr($value['name'], 0, 1);
@@ -39,7 +39,7 @@ function getUniqueFirstLetters(array $airports): array
 
 function getSort (array $airports): array
 {
-
+    $airport = [];
     foreach ($airports  as $value) {
         $airport[] = $value;
     }
@@ -53,13 +53,13 @@ function getSort (array $airports): array
 
 function getSortByFirstLetter (array $airports) : array
 {
-
+    if (!isset($_GET["filter_by_first_letter"])) return $airports;
     foreach (getSort($airports) as $value ) {
         if (substr($value['name'], 0, 1) === $_GET["filter_by_first_letter"]) {
             $airport[] = $value;
         }
     }
-    return $airport;
+    return (isset($airport)) ? $airport : airportNotFound();
 }
 
 /**
@@ -69,7 +69,8 @@ function getSortByFirstLetter (array $airports) : array
 
 function getSortByFirstState (array $airports) : array
 {
-
+    if (!isset($_GET["filter_by_state"])) return $airports;
+    $airport = [];
     foreach (getSort($airports) as $value ) {
         if ($value['state'] === $_GET["filter_by_state"]) {
             $airport[] = $value;
@@ -80,13 +81,13 @@ function getSortByFirstState (array $airports) : array
 
 /**
  * @param array $airports
- * @param string $field
  * @return array
  */
 
-function isParamSort(array $airports, string $field): array
+function isParamSort(array $airports): array
 {
-
+    if (!isset($_GET["sorting_by"])) return $airports;
+    $field = $_GET["sorting_by"];
     $sortArr = array();
     foreach ($airports as $key => $val) {
         $sortArr[$key] = $val[$field];
@@ -109,41 +110,34 @@ function isParam (array $airports) : array
         {
             $airports = getSortByFirstState($airports);
             $airports = getSortByFirstLetter($airports);
-            $airports = isParamSort($airports, $_GET["sorting_by"]);
-            return $airports;
+            return isParamSort($airports);
         }
         case (isset($_GET["filter_by_first_letter"]) and isset($_GET["filter_by_state"])):
         {
             $airports = getSortByFirstState($airports);
-            $airports = getSortByFirstLetter($airports);
-            return $airports;
+            return getSortByFirstLetter($airports);
         }
         case (isset($_GET["filter_by_first_letter"]) and isset($_GET["sorting_by"])):
         {
             $airports = getSortByFirstLetter($airports);
-            $airports = isParamSort($airports, $_GET["sorting_by"]);
-            return $airports;
+            return isParamSort($airports);
         }
         case (isset($_GET["filter_by_state"]) and isset($_GET["sorting_by"])):
         {
             $airports = getSortByFirstState($airports);
-            $airports = isParamSort($airports, $_GET["sorting_by"]);
-            return $airports;
+            return isParamSort($airports);
         }
         case (isset($_GET["filter_by_first_letter"])):
         {
-            $airports = getSortByFirstLetter($airports);
-            return $airports;
+            return getSortByFirstLetter($airports);
         }
         case (isset($_GET["filter_by_state"])):
         {
-            $airports = getSortByFirstState($airports);
-            return $airports;
+            return getSortByFirstState($airports);
         }
         case (isset($_GET["sorting_by"])):
         {
-            $airports = isParamSort($airports, $_GET["sorting_by"]);
-            return $airports;
+            return isParamSort($airports);
         }
     } return $airports;
 }
@@ -218,10 +212,11 @@ function resetAllFilters (): string
 
 function pagination (array $airports): array
 {
+    $page = 1;
+    if (isset($_GET["page"])) $page = $_GET["page"];
     if (paginationNumbers($airports) > 1) {
-    $offset = limit() * ($_GET['page'] - 1);
-    $outputByState = array_slice($airports, $offset, limit());
-    return $outputByState;
+    $offset = limit() * ($page - 1);
+    return array_slice($airports, $offset, limit());
     }
     return $airports;
 }
@@ -269,3 +264,23 @@ function linkForPagination (): string
     }
     return $link;
 }
+
+/**
+ * @return array
+ */
+
+function airportNotFound(): array
+{
+    return  [
+                [
+                    "name" => "Airports not found.",
+                    "code" => "",
+                    "city" => "",
+                    "state" => "",
+                    "address" => "",
+                    "timezone" => "",
+                ]
+            ];
+
+}
+
