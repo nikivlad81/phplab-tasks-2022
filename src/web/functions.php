@@ -148,51 +148,11 @@ function isParam (array $airports) : array
 
 function checkParam () : string
 {
-    $link = '';
-    if (isset($_GET["page"])) {
-        $link = "?page=" . $_GET["page"];
-        if (isset($_GET["filter_by_first_letter"])) {
-            $link .= "&filter_by_first_letter=" . $_GET["filter_by_first_letter"];
-            if (isset($_GET["filter_by_state"])) {
-                $link .= "&filter_by_state=" . $_GET["filter_by_state"];
-                if (isset($_GET["sorting_by"])) {
-                    $link .= "&sorting_by=" . $_GET["sorting_by"];
-                }
-            } else if (isset($_GET["sorting_by"])) {
-                $link .= "&sorting_by=" . $_GET["sorting_by"];
-                if (isset($_GET["filter_by_state"])) {
-                    $link .= "&filter_by_state=" . $_GET["filter_by_state"];
-                }
-            }
-        } else if (isset($_GET["filter_by_state"])) {
-            $link .= "&filter_by_state=" . $_GET["filter_by_state"];
-            if (isset($_GET["filter_by_first_letter"])) {
-                $link .= "&filter_by_first_letter=" . $_GET["filter_by_first_letter"];
-                if (isset($_GET["sorting_by"])) {
-                    $link .= "&sorting_by=" . $_GET["sorting_by"];
-                }
-            } else if (isset($_GET["sorting_by"])) {
-                $link .= "&sorting_by=" . $_GET["sorting_by"];
-                if (isset($_GET["filter_by_first_letter"])) {
-                    $link .= "&filter_by_first_letter=" . $_GET["filter_by_first_letter"];
-                }
-            }
-        } else if (isset($_GET["sorting_by"])) {
-            $link .= "&sorting_by=" . $_GET["sorting_by"];
-            if (isset($_GET["filter_by_state"])) {
-                $link .= "&filter_by_state=" . $_GET["filter_by_state"];
-                if (isset($_GET["filter_by_first_letter"])) {
-                    $link .= "&filter_by_first_letter=" . $_GET["filter_by_first_letter"];
-                }
-            } else if (isset($_GET["filter_by_first_letter"])) {
-                $link .= "&filter_by_first_letter=" . $_GET["filter_by_first_letter"];
-                if (isset($_GET["filter_by_state"])) {
-                    $link .= "&filter_by_state=" . $_GET["filter_by_state"];
-                }
-            }
-        }
+    $link = "?page=" . $_GET["page"];
+    foreach ($_GET as $key => $value) {
+        if ($key !== "page")
+            $link .= "&$key" . "=$value";
     }
-
     return $link;
 }
 
