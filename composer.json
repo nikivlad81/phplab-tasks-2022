@@ -20,6 +20,7 @@
         "imangazaliev/didom": "^2.0",
       "ext-dom": "*",
       "ext-curl": "*",
-      "ext-iconv": "*"
+      "ext-iconv": "*",
+      "ext-pdo": "*"
     }
 }
