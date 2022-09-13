@@ -3,7 +3,7 @@ require_once './functions.php';
 
 $airports = require './airports.php';
 $airports = isParam($airports);
-$for_pagination = $airports;
+$for_pagination = count($airports);
 $airports = pagination($airports);
 
 // Filtering
@@ -114,8 +114,8 @@ $airports = pagination($airports);
     -->
     <nav aria-label="Navigation">
         <ul class="pagination justify-content-center">
-            <?php for ($i=1; $i<paginationNumbers($for_pagination); $i++) { ?>
-                    <li class="page-item <?php if (isset($_GET['page']) and $_GET['page'] == $i) echo "active";?>"><a class="page-link" href="?page=<?php echo $i . linkForPagination()?>"><?php echo $i ?></a></li>
+            <?php for ($i=1; $i<count($airports); $i++) { ?>
+                    <li class="page-item <?php if (isset($_GET['page']) and $_GET['page'] == $i) echo "active";?>"><a class="page-link" href="?page=<?php echo $i . linkForPagination ();?>"><?php echo $i ?></a></li>
                 <?php } ?>
          </ul>
     </nav>

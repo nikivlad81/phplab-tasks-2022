@@ -211,16 +211,8 @@ function limit (): int
 function linkForPagination (): string
 {
     $link = '';
-    if (isset($_GET["filter_by_first_letter"])) {
-        $link .= "&filter_by_first_letter=" . $_GET["filter_by_first_letter"];
-        if (isset($_GET["filter_by_state"])) {
-            $link .= "&filter_by_state=" . $_GET["filter_by_state"];
-        }
-    } else if (isset($_GET["filter_by_state"])) {
-        $link .= "&filter_by_state=" . $_GET["filter_by_state"];
-        if (isset($_GET["filter_by_first_letter"])) {
-            $link .= "&filter_by_first_letter=" . $_GET["filter_by_first_letter"];
-        }
+    foreach ($_GET as $key => $value) {
+        if ($key !== 'page') $link .= "&$key" . "=$value";
     }
     return $link;
 }
