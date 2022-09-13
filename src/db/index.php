@@ -121,11 +121,6 @@ function paginationNew ($sql)
     return $sql;
 }
 
-function countPages ($count)
-{
-    return $count / limitNew();
-}
-
 function limitNew (): int
 {
     $limit = 20;
@@ -241,7 +236,7 @@ function limitNew (): int
     ?>
     <nav aria-label="Navigation">
         <ul class="pagination justify-content-center">
-            <?php for ($i=1; $i<countPages($count); $i++) { ?>
+            <?php for ($i=1; $i<count($airports); $i++) { ?>
                 <li class="page-item <?php if (isset($_GET['page']) and $_GET['page'] == $i) echo "active";?>"><a class="page-link" href="?page=<?php echo $i . param (); ?>"><?php echo $i ?></a></li>
             <?php } ?>
         </ul>
