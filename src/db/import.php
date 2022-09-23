@@ -65,7 +65,7 @@ foreach (require_once('../web/airports.php') as $item) {
         $sth->execute([
                 'name' => $item['name'],
                 'code' => $item['code'],
-                'address'=> $item['address'],
+                'address' => $item['address'],
                 'timezone' => $item['timezone'],
                 'city_id' => $cityId,
                 'state_id' => $stateId

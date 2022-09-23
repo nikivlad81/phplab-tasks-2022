@@ -2,7 +2,8 @@
 
 namespace src\oop\app\src\Transporters;
 
-class CurlStrategy implements TransportInterface {
+class CurlStrategy implements TransportInterface
+{
 
     public function getContent(string $url): string
     {

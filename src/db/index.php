@@ -16,15 +16,15 @@ if (isset($_GET["filter_by_first_letter"])) {
     $sql = "SELECT a.name, a.code, c.name AS city_id, s.name AS state_id, a.address, a.timezone FROM airports a LEFT OUTER JOIN cities c ON a.city_id = c.id JOIN states s ON a.state_id = s.id WHERE a.name LIKE '$letters%' ";
 }
 
-if (isset($_GET["filter_by_first_letter"]) AND isset($_GET["filter_by_state"])) {
+if (isset($_GET["filter_by_first_letter"]) and isset($_GET["filter_by_state"])) {
     $sql = "SELECT a.name, a.code, c.name AS city_id, s.name AS state_id, a.address, a.timezone FROM airports a LEFT OUTER JOIN cities c ON a.city_id = c.id JOIN states s ON a.state_id = s.id WHERE s.name LIKE '$states' AND a.name LIKE '$letters%' ";
 }
 
-function createArray ($sql, $pdo): array
+function createArray($sql, $pdo): array
 {
     $airports = [];
-    if($result = $pdo->query($sql)){
-        while($row = $result->fetch()){
+    if ($result = $pdo->query($sql)) {
+        while ($row = $result->fetch()) {
             array_push($airports, [
                 "name" => $row['name'],
                 "code" => $row['code'],
@@ -82,7 +82,7 @@ function linkNew(): string
  * where A - requested filter value
  */
 
-function sorting ($sql)
+function sorting($sql)
 {
     $pieces = explode('LIMIT', $sql);
     switch ($_GET["sorting_by"]) {
@@ -113,20 +113,21 @@ function sorting ($sql)
  * To get the number of all airports matched by filter use COUNT(*) in the SELECT statement with all filters applied
  */
 
-function paginationNew ($sql)
+function paginationNew($sql)
 {
     isset($_GET["page"]) ? $page = $_GET["page"] : $page = 1;
-    $offset = limitNew () * ($page - 1);
+    $offset = limitNew() * ($page - 1);
     $sql .= "LIMIT " . limitNew() . " OFFSET $offset";
     return $sql;
 }
 
-function limitNew (): int
+function limitNew(): int
 {
     $limit = 20;
-    if (isset( $_GET["filter_by_first_letter"]) OR isset( $_GET["filter_by_state"] )) $limit = 5;
+    if (isset($_GET["filter_by_first_letter"]) or isset($_GET["filter_by_state"])) $limit = 5;
     return $limit;
 }
+
 /**
  * Build a SELECT query to DB with all filters / sorting / pagination
  * and set the result to $airports variable
@@ -142,7 +143,8 @@ function limitNew (): int
     <meta name="description" content="">
     <title>Airports</title>
     <link rel="shortcut icon" href="../web/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 </head>
 <body>
 <main role="main" class="container">
@@ -163,13 +165,13 @@ function limitNew (): int
 
         <?php
         $sql = "SELECT DISTINCT LEFT(name, 1) FROM cities GROUP BY name; ";
-        if($result = $pdo->query($sql)){
-            while($row = $result->fetch()){
+        if ($result = $pdo->query($sql)) {
+            while ($row = $result->fetch()) {
                 $letter[] = $row[0];
             }
         }
         foreach ($letter as $value): ?>
-            <a href="<?= linkNew() ?>&filter_by_first_letter=<?=$value?>"><?= $value ?></a>
+            <a href="<?= linkNew() ?>&filter_by_first_letter=<?= $value ?>"><?= $value ?></a>
         <?php endforeach; ?>
         <a href="?page=1" class="float-right">Reset all filters</a>
     </div>
@@ -208,7 +210,8 @@ function limitNew (): int
             <tr>
                 <td><?= $airport['name'] ?></td>
                 <td><?= $airport['code'] ?></td>
-                <td><a href="<?= linkNew() ?>&filter_by_state=<?= $airport['state'] ?>"><?= $airport['state'] ?></a></td>
+                <td><a href="<?= linkNew() ?>&filter_by_state=<?= $airport['state'] ?>"><?= $airport['state'] ?></a>
+                </td>
                 <td><?= $airport['city'] ?></td>
                 <td><?= $airport['address'] ?></td>
                 <td><?= $airport['timezone'] ?></td>
@@ -226,18 +229,21 @@ function limitNew (): int
          - when you apply pagination - all filters and sorting are not reset
     -->
     <?php
-    function param () {
+    function param()
+    {
         $link = null;
         foreach ($_GET as $key => $value) {
             if ($key !== 'page') $link .= "&$key" . "=$value";
         }
         return $link;
     }
+
     ?>
     <nav aria-label="Navigation">
         <ul class="pagination justify-content-center">
-            <?php for ($i=1; $i<count($airports); $i++) { ?>
-                <li class="page-item <?php if (isset($_GET['page']) and $_GET['page'] == $i) echo "active";?>"><a class="page-link" href="?page=<?php echo $i . param (); ?>"><?php echo $i ?></a></li>
+            <?php for ($i = 1; $i < count($airports); $i++) { ?>
+                <li class="page-item <?php if (isset($_GET['page']) and $_GET['page'] == $i) echo "active"; ?>"><a
+                            class="page-link" href="?page=<?php echo $i . param(); ?>"><?php echo $i ?></a></li>
             <?php } ?>
         </ul>
     </nav>

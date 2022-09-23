@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 class CountArgumentsTest extends TestCase
 {
-    protected $functions;
+    protected \functions\Functions $functions;
 
     protected function setUp(): void
     {

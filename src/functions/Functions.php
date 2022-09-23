@@ -94,10 +94,12 @@ class Functions
      */
     public function countArgumentsWrapper($arg): array
     {
+
         foreach ($arg as $value) {
-            if(gettype($value) !== 'string') {
+            if (gettype($value) !== 'string') {
                 throw new InvalidArgumentException('Entered value is not string');
             }
+
         }
         return $this->countArguments(...$arg);
     }

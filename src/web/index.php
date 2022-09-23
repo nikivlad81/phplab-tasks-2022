@@ -35,7 +35,8 @@ $airports = pagination($airports);
     <meta name="description" content="">
     <title>Airports</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 </head>
 <body>
 <main role="main" class="container">
@@ -55,7 +56,7 @@ $airports = pagination($airports);
         Filter by first letter:
 
         <?php foreach (getUniqueFirstLetters(require './airports.php') as $letter): ?>
-            <a href="<?= checkParam() ?>&filter_by_first_letter=<?=$letter?>"><?= $letter ?></a>
+            <a href="<?= checkParam() ?>&filter_by_first_letter=<?= $letter ?>"><?= $letter ?></a>
         <?php endforeach; ?>
 
         <a href="<?= resetAllFilters() ?>" class="float-right">Reset all filters</a>
@@ -95,7 +96,8 @@ $airports = pagination($airports);
             <tr>
                 <td><?= $airport['name'] ?></td>
                 <td><?= $airport['code'] ?></td>
-                <td><a href="<?= checkParam() ?>&filter_by_state=<?= $airport['state'] ?>"><?= $airport['state'] ?></a></td>
+                <td><a href="<?= checkParam() ?>&filter_by_state=<?= $airport['state'] ?>"><?= $airport['state'] ?></a>
+                </td>
                 <td><?= $airport['city'] ?></td>
                 <td><?= $airport['address'] ?></td>
                 <td><?= $airport['timezone'] ?></td>
@@ -114,10 +116,12 @@ $airports = pagination($airports);
     -->
     <nav aria-label="Navigation">
         <ul class="pagination justify-content-center">
-            <?php for ($i=1; $i<count($airports); $i++) { ?>
-                    <li class="page-item <?php if (isset($_GET['page']) and $_GET['page'] == $i) echo "active";?>"><a class="page-link" href="?page=<?php echo $i . linkForPagination ();?>"><?php echo $i ?></a></li>
-                <?php } ?>
-         </ul>
+            <?php for ($i = 1; $i < count($airports); $i++) { ?>
+                <li class="page-item <?php if (isset($_GET['page']) and $_GET['page'] == $i) echo "active"; ?>"><a
+                            class="page-link" href="?page=<?php echo $i . linkForPagination(); ?>"><?php echo $i ?></a>
+                </li>
+            <?php } ?>
+        </ul>
     </nav>
 
 </main>

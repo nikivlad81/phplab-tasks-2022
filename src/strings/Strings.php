@@ -17,6 +17,6 @@ class Strings implements StringsInterface
 
     public function getBrandName(string $noun): string
     {
-        return (mb_substr($noun, 0, 1) !== mb_substr($noun, -1, 1)) ?  "The " . ucfirst($noun) : ucfirst($noun) . mb_substr($noun, 1);
+        return (mb_substr($noun, 0, 1) !== mb_substr($noun, -1, 1)) ? "The " . ucfirst($noun) : ucfirst($noun) . mb_substr($noun, 1);
     }
 }

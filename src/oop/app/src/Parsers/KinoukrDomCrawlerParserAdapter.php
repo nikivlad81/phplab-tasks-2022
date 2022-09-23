@@ -1,10 +1,12 @@
 <?php
 
 namespace src\oop\app\src\Parsers;
+
 use src\oop\app\src\Models\Movie;
 use Symfony\Component\DomCrawler\Crawler;
 
-class KinoukrDomCrawlerParserAdapter implements ParserInterface {
+class KinoukrDomCrawlerParserAdapter implements ParserInterface
+{
 
     public function parseContent(string $siteContent)
     {

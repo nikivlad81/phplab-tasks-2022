@@ -2,14 +2,15 @@
 
 namespace arrays;
 
-class Arrays implements ArraysInterface {
+class Arrays implements ArraysInterface
+{
 
     public function repeatArrayValues(array $input): array
     {
         $result = [];
 
         foreach ($input as $value) {
-            for ($i=0; $i < $value; $i++) {
+            for ($i = 0; $i < $value; $i++) {
                 $result[] = $value;
             }
         }
@@ -28,7 +29,7 @@ class Arrays implements ArraysInterface {
     public function groupByTag(array $input): array
     {
         $result = [];
-        foreach($input as $value) {
+        foreach ($input as $value) {
             foreach ($value['tags'] as $tag) {
                 $result[$tag][] = $value['name'];
                 sort($result[$tag]);

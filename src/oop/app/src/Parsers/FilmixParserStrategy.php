@@ -1,10 +1,12 @@
 <?php
 
 namespace src\oop\app\src\Parsers;
+
 use DiDom\Document;
 use src\oop\app\src\Models\Movie;
 
-class FilmixParserStrategy implements ParserInterface {
+class FilmixParserStrategy implements ParserInterface
+{
 
     public function parseContent(string $siteContent)
     {

@@ -6,7 +6,7 @@
  *
  * Create a PhpUnit test (GetUniqueFirstLettersTest) which will check this behavior
  *
- * @param  array  $airports
+ * @param array $airports
  * @return string[]
  */
 
@@ -37,24 +37,24 @@ function getUniqueFirstLetters(array $airports): array
  * @return array
  */
 
-function getSort (array $airports): array
+function getSort(array $airports): array
 {
     $airport = [];
-    foreach ($airports  as $value) {
+    foreach ($airports as $value) {
         $airport[] = $value;
     }
     return $airport;
 }
 
 /**
- * @param array $airports,
+ * @param array $airports ,
  * @return array
  */
 
-function getSortByFirstLetter (array $airports) : array
+function getSortByFirstLetter(array $airports): array
 {
     if (!isset($_GET["filter_by_first_letter"])) return $airports;
-    foreach (getSort($airports) as $value ) {
+    foreach (getSort($airports) as $value) {
         if (substr($value['name'], 0, 1) === $_GET["filter_by_first_letter"]) {
             $airport[] = $value;
         }
@@ -63,15 +63,15 @@ function getSortByFirstLetter (array $airports) : array
 }
 
 /**
- * @param array $airports,
+ * @param array $airports ,
  * @return array
  */
 
-function getSortByFirstState (array $airports) : array
+function getSortByFirstState(array $airports): array
 {
     if (!isset($_GET["filter_by_state"])) return $airports;
     $airport = [];
-    foreach (getSort($airports) as $value ) {
+    foreach (getSort($airports) as $value) {
         if ($value['state'] === $_GET["filter_by_state"]) {
             $airport[] = $value;
         }
@@ -99,11 +99,11 @@ function isParamSort(array $airports): array
 }
 
 /**
- * @param array $airports,
+ * @param array $airports ,
  * @return array
  */
 
-function isParam (array $airports) : array
+function isParam(array $airports): array
 {
     switch ($_GET) {
         case (isset($_GET["filter_by_first_letter"]) and isset($_GET["filter_by_state"]) and isset($_GET["sorting_by"])):
@@ -139,14 +139,15 @@ function isParam (array $airports) : array
         {
             return isParamSort($airports);
         }
-    } return $airports;
+    }
+    return $airports;
 }
 
 /**
  * @return string
  */
 
-function checkParam () : string
+function checkParam(): string
 {
     $link = "?page=" . $_GET["page"];
     foreach ($_GET as $key => $value) {
@@ -160,33 +161,33 @@ function checkParam () : string
  * @return string
  */
 
-function resetAllFilters (): string
+function resetAllFilters(): string
 {
     return "?page=1";
 }
 
 /**
- * @param array $airports,
+ * @param array $airports ,
  * @return array
  */
 
-function pagination (array $airports): array
+function pagination(array $airports): array
 {
     $page = 1;
     if (isset($_GET["page"])) $page = $_GET["page"];
     if (paginationNumbers($airports) > 1) {
-    $offset = limit() * ($page - 1);
-    return array_slice($airports, $offset, limit());
+        $offset = limit() * ($page - 1);
+        return array_slice($airports, $offset, limit());
     }
     return $airports;
 }
 
 /**
- * @param array $airports,
+ * @param array $airports ,
  * @return int
  */
 
-function paginationNumbers (array $airports): int
+function paginationNumbers(array $airports): int
 {
     return intval(count($airports) / limit());
 }
@@ -195,7 +196,7 @@ function paginationNumbers (array $airports): int
  * @return int
  */
 
-function limit (): int
+function limit(): int
 {
     $limit = LIMIT_ALL;
     if (isset($_GET["filter_by_first_letter"]) or isset($_GET["filter_by_state"])) {
@@ -208,7 +209,7 @@ function limit (): int
  * @return string
  */
 
-function linkForPagination (): string
+function linkForPagination(): string
 {
     $link = '';
     foreach ($_GET as $key => $value) {
@@ -223,16 +224,15 @@ function linkForPagination (): string
 
 function airportNotFound(): array
 {
-    return  [
-                [
-                    "name" => "Airports not found.",
-                    "code" => "",
-                    "city" => "",
-                    "state" => "",
-                    "address" => "",
-                    "timezone" => "",
-                ]
-            ];
+    return [
+        [
+            "name" => "Airports not found.",
+            "code" => "",
+            "city" => "",
+            "state" => "",
+            "address" => "",
+            "timezone" => "",
+        ]
+    ];
 
 }
-

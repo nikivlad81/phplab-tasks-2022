@@ -2,7 +2,8 @@
 
 namespace src\oop\app\src\Models;
 
-class Movie implements MovieInterface {
+class Movie implements MovieInterface
+{
 
     private $title;
     private $poster;

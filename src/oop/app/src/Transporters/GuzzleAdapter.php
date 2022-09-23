@@ -1,9 +1,11 @@
 <?php
 
 namespace src\oop\app\src\Transporters;
+
 use GuzzleHttp\Client;
 
-class GuzzleAdapter implements TransportInterface {
+class GuzzleAdapter implements TransportInterface
+{
 
     public function getContent(string $url): string
     {
@@ -19,3 +21,4 @@ class GuzzleAdapter implements TransportInterface {
 
     }
 }
+

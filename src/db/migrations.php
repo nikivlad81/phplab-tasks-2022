@@ -63,4 +63,3 @@ CREATE TABLE IF NOT EXISTS `airports` (
 );
 SQL;
 $pdo->exec($sql);
-
